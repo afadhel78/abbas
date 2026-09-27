@@ -27,3 +27,8 @@ form input:not([type=checkbox]):hover,form select:hover,form textarea:hover,.rej
 form input:not([type=checkbox]):focus,form select:focus,form textarea:focus,.reject-editor textarea:focus{transform:translateY(-2px);border-color:#dfff47;box-shadow:0 0 0 3px #dfff4722,0 12px 30px #9df83915}
 @media(max-width:520px){.cards article{padding:14px}.card-head strong{font-size:16px}.decision-actions button{font-size:12px}.stat-card strong{font-size:27px}}
 @media(prefers-reduced-motion:reduce){body::before,main::before{animation:none}form input:not([type=checkbox]),form select,form textarea,.reject-editor textarea,.cards article{transition:none}.cards article:hover,form input:not([type=checkbox]):hover,form select:hover,form textarea:hover{transform:none}}
+/* Watermark remains visible behind the form and the review workspace */
+.content,.review{position:relative;isolation:isolate}
+.content::before,.review::before{content:"NT";position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;user-select:none;z-index:0;font:900 clamp(210px,32vw,460px)/1 Arial,sans-serif;letter-spacing:-.13em;color:#c0ff2810;text-shadow:0 0 55px #b7ff3e38,0 0 145px #93e84221;animation:nt-pulse 16s ease-in-out infinite alternate}
+.content>* ,.review>*{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.content::before,.review::before{animation:none}}
