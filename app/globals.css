@@ -32,3 +32,4 @@ form input:not([type=checkbox]):focus,form select:focus,form textarea:focus,.rej
 .content::before,.review::before{content:"NT";position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;user-select:none;z-index:0;font:900 clamp(210px,32vw,460px)/1 Arial,sans-serif;letter-spacing:-.13em;color:#c0ff2810;text-shadow:0 0 55px #b7ff3e38,0 0 145px #93e84221;animation:nt-pulse 16s ease-in-out infinite alternate}
 .content>* ,.review>*{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.content::before,.review::before{animation:none}}
+.content::before,.review::before{color:#c0ff2809;text-shadow:0 0 55px #b7ff3e18,0 0 145px #93e8420b}
