@@ -34,3 +34,4 @@ form input:not([type=checkbox]):focus,form select:focus,form textarea:focus,.rej
 @media(prefers-reduced-motion:reduce){.content::before,.review::before{animation:none}}
 .content::before,.review::before{color:#c0ff2809;text-shadow:0 0 55px #b7ff3e18,0 0 145px #93e8420b}
 .delete-button{background:transparent;border:1px solid #8a4d4d;color:#ffc5bd}.delete-button:hover:not(:disabled){background:#4a2626;border-color:#ff958a;color:#fff}
+.member-delete{border-radius:8px;padding:7px 10px;white-space:nowrap;font-size:12px;font-weight:800}.member-delete:disabled{opacity:.5;cursor:not-allowed}
