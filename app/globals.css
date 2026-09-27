@@ -33,3 +33,4 @@ form input:not([type=checkbox]):focus,form select:focus,form textarea:focus,.rej
 .content>* ,.review>*{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.content::before,.review::before{animation:none}}
 .content::before,.review::before{color:#c0ff2809;text-shadow:0 0 55px #b7ff3e18,0 0 145px #93e8420b}
+.delete-button{background:transparent;border:1px solid #8a4d4d;color:#ffc5bd}.delete-button:hover:not(:disabled){background:#4a2626;border-color:#ff958a;color:#fff}
