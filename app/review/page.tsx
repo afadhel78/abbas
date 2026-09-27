@@ -29,8 +29,9 @@ export default function Review({ embedded = false, onBack }: { embedded?: boolea
     try { await fetchData(code); setStatus("ready"); }
     catch (cause) { setError(cause instanceof Error ? cause.message : "تعذر تحميل الطلبات."); setStatus("idle"); }
   }
-  async function decide(id: number, action: "accept" | "reject" | "delete") {
+  async function decide(id: number, action: "accept" | "reject" | "delete" | "delete-member") {
     if (action === "delete" && !window.confirm("هل تريد حذف هذا الطلب نهائيًا؟ لا يمكن استعادته بعد الحذف.")) return;
+    if (action === "delete-member" && !window.confirm("هل تريد حذف هذا العضو وطلبه نهائيًا؟ سيُزال من الجدول ويمكنه التقديم من جديد.")) return;
     setError(""); setNotice(""); setBusyId(id);
     try {
       const response = await fetch("/api/review", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-code": code }, body: JSON.stringify({ id, action, reason: action === "reject" ? reason : undefined }) });
@@ -38,7 +39,7 @@ export default function Review({ embedded = false, onBack }: { embedded?: boolea
       if (!response.ok) throw new Error(result.error || "تعذر حفظ القرار.");
       await fetchData(code);
       setRejectId(null); setReason("");
-      setNotice(action === "accept" ? "تم قبول الطلب وإضافة العضو إلى الجدول." : action === "reject" ? "تم رفض الطلب وحفظ السبب." : "تم حذف الطلب نهائيًا.");
+      setNotice(action === "accept" ? "تم قبول الطلب وإضافة العضو إلى الجدول." : action === "reject" ? "تم رفض الطلب وحفظ السبب." : action === "delete-member" ? "تم حذف العضو وطلبه من السجلات." : "تم حذف الطلب نهائيًا.");
     } catch (cause) { setError(cause instanceof Error ? cause.message : "تعذر حفظ القرار."); }
     finally { setBusyId(null); }
   }
@@ -82,7 +83,7 @@ export default function Review({ embedded = false, onBack }: { embedded?: boolea
           <div className="decision-actions"><button type="button" className="accept-button" disabled={busyId !== null} onClick={() => decide(item.id, "accept")}>✓ قبول وإضافة للأعضاء</button><button type="button" className="reject-button" disabled={busyId !== null} onClick={() => { setRejectId(rejectId === item.id ? null : item.id); setReason(""); }}>✕ رفض الطلب</button><button type="button" className="delete-button" disabled={busyId !== null} onClick={() => decide(item.id, "delete")}>🗑 حذف الطلب</button></div>
           {rejectId === item.id && <div className="reject-editor"><label htmlFor={`reason-${item.id}`}>سبب الرفض <span>*</span></label><textarea id={`reason-${item.id}`} required minLength={3} maxLength={500} value={reason} onChange={event => setReason(event.target.value)} placeholder="اكتب سبب الرفض ليُحفظ مع الطلب..." rows={3} /><div className="decision-actions"><button type="button" className="reject-button solid" disabled={busyId !== null || reason.trim().length < 3} onClick={() => decide(item.id, "reject")}>تأكيد الرفض</button><button type="button" className="quiet-button" onClick={() => { setRejectId(null); setReason(""); }}>إلغاء</button></div></div>}
         </article>)}</div> : <div className="empty-state">✨ لا توجد طلبات جديدة الآن.</div>)}
-        {tab === "members" && (data.members.length ? <div className="table-wrap"><table><thead><tr><th>العضو</th><th>التواصل عبر ديسكورد</th><th>العمر</th><th>ساعات اللعب</th><th>الخبرة</th><th>العصابة السابقة</th><th>تاريخ القبول</th></tr></thead><tbody>{data.members.map(member => <tr key={member.id}><td><strong>{member.game_name}</strong><small>#{member.application_id}</small></td><td><small>{discordLabel(member.discord_id)}</small>{discordContact(member.discord_id)}</td><td>{member.age}</td><td>{member.hours}</td><td>{member.roleplay}</td><td>{member.previous_gang_name || "—"}</td><td>{date(member.joined_at)}</td></tr>)}</tbody></table></div> : <div className="empty-state">🤝 لم يُقبل أي عضو بعد.</div>)}
+        {tab === "members" && (data.members.length ? <div className="table-wrap"><table><thead><tr><th>العضو</th><th>التواصل عبر ديسكورد</th><th>العمر</th><th>ساعات اللعب</th><th>الخبرة</th><th>العصابة السابقة</th><th>تاريخ القبول</th><th>الإجراء</th></tr></thead><tbody>{data.members.map(member => <tr key={member.id}><td><strong>{member.game_name}</strong><small>#{member.application_id}</small></td><td><small>{discordLabel(member.discord_id)}</small>{discordContact(member.discord_id)}</td><td>{member.age}</td><td>{member.hours}</td><td>{member.roleplay}</td><td>{member.previous_gang_name || "—"}</td><td>{date(member.joined_at)}</td><td><button type="button" className="delete-button member-delete" disabled={busyId !== null} onClick={() => decide(member.application_id, "delete-member")}>🗑 حذف العضو</button></td></tr>)}</tbody></table></div> : <div className="empty-state">🤝 لم يُقبل أي عضو بعد.</div>)}
         {tab === "rejected" && (rejected.length ? <div className="cards">{rejected.map(item => <article key={item.id}><div className="card-head"><strong>👤 {item.game_name}</strong><time>{date(item.reviewed_at || item.created_at)}</time></div><p><b>{discordLabel(item.discord_id)}:</b> {discordContact(item.discord_id)}</p>{item.previous_gang_name && <p><b>🏴 العصابة السابقة:</b> {item.previous_gang_name}</p>}<h3>سبب الرفض</h3><p>{item.rejection_reason}</p><div className="decision-actions"><button type="button" className="delete-button" disabled={busyId !== null} onClick={() => decide(item.id, "delete")}>🗑 حذف الطلب</button></div></article>)}</div> : <div className="empty-state">لا توجد طلبات مرفوضة.</div>)}
       </>}
     </div>
