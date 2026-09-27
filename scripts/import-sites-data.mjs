@@ -2,10 +2,10 @@ import { readFile } from 'node:fs/promises';
 import { neon } from '@neondatabase/serverless';
 
 const filename = process.argv[2];
-if (!filename || !(process.env.NEON_URL || process.env.DATABASE_URL)) throw new Error('Usage: NEON_URL=... node scripts/import-sites-data.mjs <export.json>');
+if (!filename || !(process.env.NEON_DATABASE_URL || process.env.DATABASE_URL)) throw new Error('Usage: NEON_DATABASE_URL=... node scripts/import-sites-data.mjs <export.json>');
 const { applications, members } = JSON.parse(await readFile(filename, 'utf8'));
 if (!Array.isArray(applications) || !Array.isArray(members)) throw new Error('Invalid export file');
-const sql = neon(process.env.NEON_URL || process.env.DATABASE_URL);
+const sql = neon(process.env.NEON_DATABASE_URL || process.env.DATABASE_URL);
 const existing = await sql`SELECT COUNT(*)::int AS count FROM applications`;
 if (existing[0].count !== 0) throw new Error('Destination is not empty; import stopped to avoid duplicate or overwritten applications');
 for (const a of applications) {

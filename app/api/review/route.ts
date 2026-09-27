@@ -9,8 +9,8 @@ function authorized(request: NextRequest) {
   return timingSafeEqual(createHash("sha256").update(supplied).digest(), createHash("sha256").update(secret).digest());
 }
 function database() {
-  if (!(process.env.NEON_URL || process.env.DATABASE_URL)) throw new Error("Database URL missing");
-  return neon(process.env.NEON_URL || process.env.DATABASE_URL!);
+  if (!(process.env.NEON_DATABASE_URL || process.env.DATABASE_URL)) throw new Error("Database URL missing");
+  return neon(process.env.NEON_DATABASE_URL || process.env.DATABASE_URL!);
 }
 export async function GET(request: NextRequest) {
   if (!authorized(request)) return NextResponse.json({ error: "رمز الإدارة غير صحيح." }, { status: 401 });
