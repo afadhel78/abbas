@@ -33,10 +33,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json() as { id?: unknown; action?: unknown; reason?: unknown };
     const id = Number(body.id);
     const reason = typeof body.reason === "string" ? body.reason.trim() : "";
-    if (!Number.isSafeInteger(id) || id < 1 || (body.action !== "accept" && body.action !== "reject" && body.action !== "delete")) return NextResponse.json({ error: "طلب غير صالح." }, { status: 400 });
+    if (!Number.isSafeInteger(id) || id < 1 || (body.action !== "accept" && body.action !== "reject" && body.action !== "delete" && body.action !== "delete-member")) return NextResponse.json({ error: "طلب غير صالح." }, { status: 400 });
     if (body.action === "reject" && (reason.length < 3 || reason.length > 500)) return NextResponse.json({ error: "اكتب سبب الرفض (3 إلى 500 حرف)." }, { status: 400 });
     const sql = database();
-    if (body.action === "delete") {
+    if (body.action === "delete-member") {
+      const [removed, application] = await sql.transaction([
+        sql`DELETE FROM members WHERE application_id=${id} RETURNING application_id`,
+        sql`DELETE FROM applications WHERE id=${id} AND status='accepted' RETURNING id`,
+      ]);
+      if (!removed.length || !application.length) return NextResponse.json({ error: "تعذر حذف العضو؛ ربما أُزيل مسبقًا." }, { status: 409 });
+    } else if (body.action === "delete") {
       const result = await sql`DELETE FROM applications WHERE id=${id} AND status IN ('pending','rejected') RETURNING id`;
       if (!result.length) return NextResponse.json({ error: "تعذر حذف الطلب؛ ربما قُبل أو حُذف مسبقًا." }, { status: 409 });
     } else if (body.action === "accept") {
