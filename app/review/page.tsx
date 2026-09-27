@@ -7,7 +7,7 @@ type Stats = { total: number; accepted: number; rejected: number; pending: numbe
 type ReviewData = { applications: Application[]; members: Member[]; stats: Stats };
 type Tab = "pending" | "members" | "rejected";
 
-export default function Review() {
+export default function Review({ embedded = false, onBack }: { embedded?: boolean; onBack?: () => void }) {
   const [code, setCode] = useState("");
   const [data, setData] = useState<ReviewData | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "ready">("idle");
@@ -53,9 +53,10 @@ export default function Review() {
   }
   const date = (value: string) => new Date(value).toLocaleString("ar-IQ", { dateStyle: "medium", timeStyle: "short" });
 
-  return <main dir="rtl" className="review">
-    <header className="topbar"><div className="brand"><img className="brand-logo" src="/next-nt-logo.png" alt="شعار نيكست" /><div>N E X T<small>عائلة نيكست</small></div></div><a className="top-link" href="/">العودة إلى التقديم ←</a></header>
+  return <section dir="rtl" className="review" aria-label="مراجعة الطلبات والأعضاء">
+    {!embedded && <header className="topbar"><div className="brand"><img className="brand-logo" src="/next-nt-logo.png" alt="شعار نيكست" /><div>N E X T<small>عائلة نيكست</small></div></div><a className="top-link" href="/">العودة إلى التقديم ←</a></header>}
     <div className="review-body">
+      {embedded && <button className="review-back" type="button" onClick={onBack}>← العودة إلى التقديم</button>}
       <div className="caption">🔒 إدارة نيكست</div><h1>مراجعة الطلبات والأعضاء</h1>
       {status !== "ready" && <form onSubmit={load} className="review-form"><label><span>رمز الإدارة</span><input type="password" required value={code} onChange={event => setCode(event.target.value)} placeholder="أدخل الرمز المشترك" /></label><button className="submit" type="submit" disabled={status === "loading"}>{status === "loading" ? "جارٍ التحميل..." : "عرض الطلبات"} <span>↗</span></button></form>}
       {error && <p className="review-alert error" role="alert">{error}</p>}
@@ -84,5 +85,5 @@ export default function Review() {
         {tab === "rejected" && (rejected.length ? <div className="cards">{rejected.map(item => <article key={item.id}><div className="card-head"><strong>👤 {item.game_name}</strong><time>{date(item.reviewed_at || item.created_at)}</time></div><p><b>{discordLabel(item.discord_id)}:</b> {discordContact(item.discord_id)}</p>{item.previous_gang_name && <p><b>🏴 العصابة السابقة:</b> {item.previous_gang_name}</p>}<h3>سبب الرفض</h3><p>{item.rejection_reason}</p></article>)}</div> : <div className="empty-state">لا توجد طلبات مرفوضة.</div>)}
       </>}
     </div>
-  </main>;
+  </section>;
 }
