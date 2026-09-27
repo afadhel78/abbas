@@ -4,7 +4,7 @@ import { applicationId, setApplicationCookie } from "../../../lib/application-se
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.ADMIN_CODE || !process.env.DATABASE_URL) throw new Error("Application configuration missing");
+    if (!process.env.ADMIN_CODE || !(process.env.NEON_URL || process.env.DATABASE_URL)) throw new Error("Application configuration missing");
     if (await applicationId(request, process.env.ADMIN_CODE)) return NextResponse.json({ error: "لديك طلب سابق. افتح حالة الطلب لمتابعته." }, { status: 409 });
     const data = await request.json() as Record<string, unknown>;
     const value = (key: string, max: number) => typeof data[key] === "string" ? data[key].trim().slice(0, max) : "";
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     if (!gameName || !/^\d{15,22}$/.test(discordId) || !Number.isInteger(age) || age < 13 || age > 80 || !Number.isInteger(hours) || hours < 0 || hours > 50000 || !["نعم", "لا"].includes(experience) || (experience === "نعم" && (previousGangName.length < 2 || previousGangName.length > 60)) || reason.length < 20 || !Number.isInteger(Number(roleplay)) || Number(roleplay) < 1 || Number(roleplay) > 500) {
       return NextResponse.json({ error: "تحقق من جميع الحقول ومعرّف ديسكورد الرقمي." }, { status: 400 });
     }
-    const sql = neon(process.env.DATABASE_URL);
+    const sql = neon(process.env.NEON_URL || process.env.DATABASE_URL!);
     const existing = await sql`SELECT id FROM applications WHERE discord_id=${discordId} LIMIT 1`;
     if (existing.length) return NextResponse.json({ error: "سبق تقديم طلب بهذا المعرّف. يُسمح بطلب واحد فقط لكل معرّف ديسكورد." }, { status: 409 });
     let saved;
