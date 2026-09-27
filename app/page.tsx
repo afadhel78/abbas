@@ -64,7 +64,7 @@ export default function Home() {
           <img className="brand-logo" src="/next-nt-logo.png" alt="شعار نيكست" />
           <div>N E X T<small>عائلة نيكست</small></div>
         </div>
-        <div className="top-actions"><button className="leaders-link" type="button" onClick={() => setLeadersView(true)}>🔒 لوحة القادة</button><a className="top-link" href="#apply" onClick={() => setLeadersView(false)}>{application?.hasApplication ? "حالة الطلب" : "ابدأ التقديم"} <span aria-hidden="true">↙</span></a></div>
+        <a className="top-link" href="#apply" onClick={() => setLeadersView(false)}>{application?.hasApplication ? "حالة الطلب" : "ابدأ التقديم"} <span aria-hidden="true">↙</span></a>
       </header>
 
       {leadersView ? <Review embedded onBack={() => setLeadersView(false)} /> : <div className="layout">
@@ -113,7 +113,7 @@ export default function Home() {
           )}
         </section>
       </div>}
-      <footer><span>© NT · NEXT FAMILY</span><span>مقاطعة بوليتو</span></footer>
+      <footer><span>© NT · NEXT FAMILY</span><span className="footer-end">مقاطعة بوليتو <button className="leaders-secret" type="button" aria-label="لوحة القادة" title="لوحة القادة" onClick={() => { setLeadersView(true); window.scrollTo({ top: 0, behavior: "smooth" }); }}>🔒</button></span></footer>
     </main>
   );
 }
