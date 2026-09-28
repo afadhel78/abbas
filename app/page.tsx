@@ -126,7 +126,7 @@ export default function Home() {
               <label className="agree wide"><input type="checkbox" required /><span>أتعهد بالالتزام بقوانين المقاطعة والعائلة واحترام تقمّص الأدوار.</span></label>
               {status === "error" && <p className="error wide" role="alert">{error}</p>}
               <button className="submit wide" disabled={status === "sending"} type="submit"><span>{status === "sending" ? "جارٍ إرسال طلبك..." : "إرسال طلب الانضمام"}</span><span aria-hidden="true">↗</span></button>
-              <p className="note wide">🔒 انسخ معرّف حسابك الرقمي من خيار «كوبي يوزر» في ديسكورد. سيستخدمه القادة لفتح حسابك مباشرة.</p>
+              <p className="note wide">🔒 انسخ معرّف حسابك الرقمي من خيار «كوبي يوزر» في ديسكورد. سيستخدمه المسؤول لفتح حسابك مباشرة.</p>
             </form>
             </>
           )}
