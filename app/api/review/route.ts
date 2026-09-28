@@ -16,12 +16,15 @@ export async function GET(request: NextRequest) {
   if (!authorized(request)) return NextResponse.json({ error: "رمز الإدارة غير صحيح." }, { status: 401 });
   try {
     const sql = database();
-    const [applications, members, counts] = await Promise.all([
+    await sql`CREATE TABLE IF NOT EXISTS application_submission_history (application_id BIGINT PRIMARY KEY)`;
+    await sql`INSERT INTO application_submission_history(application_id) SELECT id FROM applications ON CONFLICT DO NOTHING`;
+    const [applications, members, counts, history] = await Promise.all([
       sql`SELECT id,game_name,discord_id,age,hours,experience,previous_gang_name,reason,roleplay,created_at,status,rejection_reason,reviewed_at FROM applications ORDER BY id DESC LIMIT 1000`,
       sql`SELECT m.id,m.application_id,m.game_name,m.discord_id,m.joined_at,a.age,a.hours,a.roleplay,a.previous_gang_name FROM members m JOIN applications a ON a.id=m.application_id ORDER BY m.id DESC LIMIT 1000`,
       sql`SELECT COUNT(*)::int AS total, COUNT(*) FILTER (WHERE status='accepted')::int AS accepted, COUNT(*) FILTER (WHERE status='rejected')::int AS rejected, COUNT(*) FILTER (WHERE status='pending')::int AS pending FROM applications`,
+      sql`SELECT COUNT(*)::int AS all_time FROM application_submission_history`,
     ]);
-    return NextResponse.json({ applications, members, stats: counts[0] }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ applications, members, stats: { ...counts[0], all_time: history[0].all_time } }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Review load failed", error);
     return NextResponse.json({ error: "تعذر تحميل الطلبات." }, { status: 503 });
