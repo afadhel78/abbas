@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 
 type Application = { id: number; game_name: string; discord_id: string; age: number; hours: number; experience: string; previous_gang_name: string | null; reason: string; roleplay: string; created_at: string; status: "pending" | "accepted" | "rejected"; rejection_reason: string | null; reviewed_at: string | null };
 type Member = { id: number; application_id: number; game_name: string; discord_id: string; joined_at: string; age: number; hours: number; roleplay: string; previous_gang_name: string | null };
-type Stats = { total: number; accepted: number; rejected: number; pending: number };
+type Stats = { total: number; accepted: number; rejected: number; pending: number; all_time: number };
 type ReviewData = { applications: Application[]; members: Member[]; stats: Stats };
 type Tab = "pending" | "members" | "rejected";
 
@@ -69,6 +69,7 @@ export default function Review({ embedded = false, onBack }: { embedded?: boolea
           <div className="stat-card"><span>⏳ قيد المراجعة</span><strong>{data.stats.pending}</strong></div>
           <div className="stat-card accepted"><span>✅ الطلبات المقبولة</span><strong>{data.stats.accepted}</strong></div>
           <div className="stat-card rejected"><span>❌ الطلبات المرفوضة</span><strong>{data.stats.rejected}</strong></div>
+          <div className="stat-card"><span>👥 جميع المتقدمين</span><strong>{data.stats.all_time}</strong><small>يشمل الطلبات المحذوفة</small></div>
         </div>
         <div className="review-tabs" role="tablist" aria-label="أقسام المراجعة">
           <button type="button" role="tab" aria-selected={tab === "pending"} className={tab === "pending" ? "active" : ""} onClick={() => setTab("pending")}>الطلبات الجديدة <span>{data.stats.pending}</span></button>
