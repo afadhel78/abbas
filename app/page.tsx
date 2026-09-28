@@ -14,6 +14,7 @@ export default function Home() {
   const [previousGang, setPreviousGang] = useState("");
   const [error, setError] = useState("");
   const [leadersView, setLeadersView] = useState(false);
+  const [welcome, setWelcome] = useState(true);
 
   async function checkApplication() {
     setCheckingStatus(true);
@@ -56,6 +57,24 @@ export default function Home() {
       setStatus("error");
     }
   }
+
+  if (welcome) return (
+    <main dir="rtl" className="welcome-screen">
+      <div className="welcome-glow" aria-hidden="true" />
+      <section className="welcome-panel" aria-labelledby="welcome-heading">
+        <span className="welcome-kicker">مقاطعة بوليتو · فايف إم</span>
+        <img className="welcome-logo" src="/next-nt-logo.png" alt="شعار عائلة نيكست NT" />
+        <h1 id="welcome-heading">مرحبًا بك في عائلة نيكست</h1>
+        <p className="welcome-intro">انضم إلى صفوف NT وابدأ رحلتك معنا.</p>
+        <div className="welcome-leaders" aria-label="قادة العائلة">
+          <span className="welcome-crown" aria-hidden="true">♛</span>
+          <span className="welcome-leaders-title">القادة</span>
+          <div className="welcome-leader-names"><span>مزيني</span><span className="welcome-divider" aria-hidden="true">✦</span><span>أبو عايض</span></div>
+        </div>
+        <button type="button" className="welcome-enter" onClick={() => setWelcome(false)}>الدخول إلى التقديم <span aria-hidden="true">↗</span></button>
+      </section>
+    </main>
+  );
 
   return (
     <main dir="rtl">
