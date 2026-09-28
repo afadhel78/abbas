@@ -30,6 +30,21 @@ form input:not([type=checkbox]):focus,form select:focus,form textarea:focus,.rej
 @media(max-width:520px){.cards article{padding:14px}.card-head strong{font-size:16px}.decision-actions button{font-size:12px}.stat-card strong{font-size:27px}}
 @media(prefers-reduced-motion:reduce){body::before,main::before{animation:none}form input:not([type=checkbox]),form select,form textarea,.reject-editor textarea,.cards article{transition:none}.cards article:hover,form input:not([type=checkbox]):hover,form select:hover,form textarea:hover{transform:none}}
 /* Watermark remains visible behind the form and the review workspace */
+.welcome-screen{min-height:100svh;display:grid;place-items:center;overflow:hidden;padding:36px 20px;background:radial-gradient(ellipse at 50% 35%,#263d2270 0%,#0b1410 43%,#070b09 100%)}
+.welcome-glow{position:absolute;width:min(90vw,760px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#c2eb4050 0%,#73972a19 38%,transparent 68%);filter:blur(50px);animation:welcome-glow 12s ease-in-out infinite alternate;pointer-events:none}
+.welcome-panel{position:relative;z-index:1;width:min(100%,680px);text-align:center;display:flex;flex-direction:column;align-items:center;padding:35px 28px 50px;border:1px solid #a7bf6747;border-radius:30px;background:linear-gradient(150deg,#1a251cdd,#0b130fdc 60%,#1b2515cc);box-shadow:0 30px 100px #0009,inset 0 1px #dfff4740}
+.welcome-kicker{color:#cbe892;font-size:12px;font-weight:800;letter-spacing:.12em}
+.welcome-logo{display:block;width:min(72vw,290px);height:auto;object-fit:contain;margin:12px auto 0;filter:drop-shadow(0 0 28px #c5ef4a58);animation:welcome-float 8s ease-in-out infinite}
+.welcome-panel h1{font-size:clamp(26px,4vw,43px);line-height:1.4;margin:3px 0 4px;color:#f5f8ee}
+.welcome-intro{font-size:14px;color:#abbba8;margin:0 0 25px}
+.welcome-leaders{position:relative;width:min(100%,430px);padding:29px 24px 22px;border:1px solid #c5a55b;border-radius:18px;background:linear-gradient(135deg,#4f401e5c,#172017e8 47%,#51402052);box-shadow:0 0 28px #b5963324,inset 0 0 0 1px #f7dd8750}
+.welcome-leaders::before,.welcome-leaders::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);color:#efd891;font-size:15px}.welcome-leaders::before{right:12px}.welcome-leaders::after{left:12px}
+.welcome-crown{position:absolute;top:-24px;left:50%;transform:translateX(-50%);display:grid;place-items:center;width:48px;height:42px;border-radius:50%;background:#182016;color:#f7d87b;font:35px Georgia,serif;text-shadow:0 0 16px #f7ce61;box-shadow:0 0 0 1px #bfa35e}
+.welcome-leaders-title{display:block;font-size:12px;color:#e9d699;font-weight:800}.welcome-leader-names{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:5px;color:#fff7db;font-size:clamp(16px,3vw,20px);font-weight:900}.welcome-divider{color:#ddc170;font-size:12px}
+.welcome-enter{margin-top:29px;min-width:min(100%,290px);display:flex;justify-content:center;align-items:center;gap:16px;border:0;border-radius:12px;background:#dfff47;color:#14200f;padding:13px 24px;font-weight:900;box-shadow:0 9px 35px #b4e84236;transition:transform .2s,box-shadow .2s}.welcome-enter:hover{transform:translateY(-3px);box-shadow:0 13px 42px #b4e84266}.welcome-enter:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@keyframes welcome-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}@keyframes welcome-glow{from{transform:translate(-3%,2%) scale(.95);opacity:.55}to{transform:translate(3%,-2%) scale(1.08);opacity:1}}
+@media(max-width:520px){.welcome-panel{padding:32px 19px 38px}.welcome-logo{width:min(64vw,225px)}.welcome-leader-names{gap:10px}}
+@media(prefers-reduced-motion:reduce){.welcome-logo,.welcome-glow{animation:none}.welcome-enter{transition:none}}
 .content,.review{position:relative;isolation:isolate}
 .content::before,.review::before{content:"NT";position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;user-select:none;z-index:0;font:900 clamp(210px,32vw,460px)/1 Arial,sans-serif;letter-spacing:-.13em;color:#c0ff2810;text-shadow:0 0 55px #b7ff3e38,0 0 145px #93e84221;animation:nt-pulse 16s ease-in-out infinite alternate}
 .content>* ,.review>*{position:relative;z-index:1}
