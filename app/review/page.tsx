@@ -56,7 +56,7 @@ export default function Review({ embedded = false, onBack }: { embedded?: boolea
   const date = (value: string) => new Date(value).toLocaleString("ar-IQ", { dateStyle: "medium", timeStyle: "short" });
 
   return <section dir="rtl" className="review" aria-label="مراجعة الطلبات والأعضاء">
-    {!embedded && <header className="topbar"><div className="brand"><img className="brand-logo" src="/next-nt-logo.png" alt="شعار نيكست" /><div>N E X T<small>عائلة نيكست</small></div></div><a className="top-link" href="/">العودة إلى التقديم ←</a></header>}
+    {!embedded && <header className="topbar"><div className="brand"><img className="brand-logo" src="/next-nt-logo.webp" alt="شعار نيكست" /><div>N E X T<small>عائلة نيكست</small></div></div><a className="top-link" href="/">العودة إلى التقديم ←</a></header>}
     <div className="review-body">
       {embedded && <button className="review-back" type="button" onClick={onBack}>← العودة إلى التقديم</button>}
       <div className="caption">🔒 إدارة نيكست</div><h1>مراجعة الطلبات والأعضاء</h1>
