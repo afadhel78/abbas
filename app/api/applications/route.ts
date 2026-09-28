@@ -14,12 +14,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "تحقق من جميع الحقول ومعرّف ديسكورد الرقمي." }, { status: 400 });
     }
     const sql = neon(process.env.NEON_DATABASE_URL || process.env.DATABASE_URL!);
+    await sql`CREATE TABLE IF NOT EXISTS application_submission_history (application_id BIGINT PRIMARY KEY)`;
+    await sql`INSERT INTO application_submission_history(application_id) SELECT id FROM applications ON CONFLICT DO NOTHING`;
     const existing = await sql`SELECT id FROM applications WHERE discord_id=${discordId} LIMIT 1`;
     if (existing.length) return NextResponse.json({ error: "سبق تقديم طلب بهذا المعرّف. يُسمح بطلب واحد فقط لكل معرّف ديسكورد." }, { status: 409 });
     let saved;
     try {
-      saved = await sql`INSERT INTO applications (game_name, discord_id, age, hours, experience, previous_gang_name, reason, roleplay)
-        VALUES (${gameName}, ${discordId}, ${age}, ${hours}, ${experience}, ${experience === "نعم" ? previousGangName : null}, ${reason}, ${roleplay}) RETURNING id`;
+      saved = await sql`WITH submitted AS (
+        INSERT INTO applications (game_name, discord_id, age, hours, experience, previous_gang_name, reason, roleplay)
+        VALUES (${gameName}, ${discordId}, ${age}, ${hours}, ${experience}, ${experience === "نعم" ? previousGangName : null}, ${reason}, ${roleplay}) RETURNING id
+      ), recorded AS (
+        INSERT INTO application_submission_history(application_id) SELECT id FROM submitted RETURNING application_id
+      ) SELECT application_id AS id FROM recorded`;
     } catch (error) {
       if (error && typeof error === "object" && "code" in error && error.code === "23505") {
         return NextResponse.json({ error: "سبق تقديم طلب بهذا المعرّف. يُسمح بطلب واحد فقط لكل معرّف ديسكورد." }, { status: 409 });
