@@ -63,7 +63,7 @@ export default function Home() {
       <div className="welcome-glow" aria-hidden="true" />
       <section className="welcome-panel" aria-labelledby="welcome-heading">
         <span className="welcome-kicker">مقاطعة بوليتو · فايف إم</span>
-        <img className="welcome-logo" src="/next-nt-logo.png" alt="شعار عائلة نيكست NT" />
+        <img className="welcome-logo" src="/next-nt-logo.webp" alt="شعار عائلة نيكست NT" />
         <h1 id="welcome-heading">مرحبًا بك في عائلة نيكست</h1>
         <p className="welcome-intro">انضم إلى صفوف NT وابدأ رحلتك معنا.</p>
         <div className="welcome-leaders" aria-label="قادة العائلة">
@@ -80,7 +80,7 @@ export default function Home() {
     <main dir="rtl">
       <header className="topbar">
         <div className="brand" aria-label="عائلة نيكست NT">
-          <img className="brand-logo" src="/next-nt-logo.png" alt="شعار نيكست" />
+          <img className="brand-logo" src="/next-nt-logo.webp" alt="شعار نيكست" />
           <div>N E X T<small>عائلة نيكست</small></div>
         </div>
         <a className="top-link" href="#apply" onClick={() => setLeadersView(false)}>{application?.hasApplication ? "حالة الطلب" : "ابدأ التقديم"} <span aria-hidden="true">↙</span></a>
@@ -93,7 +93,7 @@ export default function Home() {
           <h1 id="welcome-title">انضم إلى<br /><em>عائلة نيكست.</em></h1>
           <p>نبحث عن أعضاء يقدّرون العمل الجماعي ويحترمون تقمّص الأدوار. أخبرنا عن نفسك وقدّم طلب انضمامك إلى NT.</p>
           <div className="tags"><span>🎮 مجتمع فايف إم</span><span>🤝 روح الفريق</span></div>
-          <img className="hero-logo" src="/next-nt-logo.png" alt="" aria-hidden="true" />
+          <img className="hero-logo" src="/next-nt-logo.webp" alt="" aria-hidden="true" />
         </section>
 
         <section className="content" id="apply" aria-labelledby="form-title">
